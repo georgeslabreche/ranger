@@ -49,7 +49,6 @@ public:
 
   // All command line arguments as member: Capital letters
   std::vector<std::string> alwayssplitvars;
-  std::vector<std::string> includevars;
   std::string caseweights;
   std::string depvarname;
   double fraction;
