@@ -33,7 +33,7 @@ ArgumentHandler::ArgumentHandler(int argc, char **argv) :
 int ArgumentHandler::processArguments() {
 
   // short options
-  char const *short_options = "A:C:D:F:HM:NOP:Q:R:S:T:U:XZa:b:c:d:f:hi:j:kl:m:o:pr:s:t:uvwy:z:";
+  char const *short_options = "A:C:D:F:HI:M:NOP:Q:R:S:U:XZa:b:c:d:f:hi:j:kl:m:o:pr:s:t:uvwy:z:";
 
   // long options: longname, no/optional/required argument?, flag(not used!), shortname
   const struct option long_options[] = {
@@ -42,6 +42,7 @@ int ArgumentHandler::processArguments() {
     { "depvarname",           required_argument,  0, 'D'},
     { "fraction",             required_argument,  0, 'F'},
     { "holdout",              no_argument,        0, 'H'},
+    { "includevars",          required_argument,  0, 'I'},
     { "memmode",              required_argument,  0, 'M'},
     { "savemem",              no_argument,        0, 'N'},
     { "skipoob",              no_argument,        0, 'O'},
@@ -49,7 +50,6 @@ int ArgumentHandler::processArguments() {
     { "predictiontype",       required_argument,  0, 'Q'},
     { "randomsplits",         required_argument,  0, 'R'},
     { "splitweights",         required_argument,  0, 'S'},
-    { "trainingvars",         required_argument,  0, 'T'},
     { "nthreads",             required_argument,  0, 'U'},
     { "predall",              no_argument,        0, 'X'},
     { "version",              no_argument,        0, 'Z'},
@@ -119,6 +119,10 @@ int ArgumentHandler::processArguments() {
       holdout = true;
       break;
 
+    case 'I':
+      splitString(includevars, optarg, ',');
+      break;
+
     case 'M':
       try {
         memmode = (MemoryMode) std::stoi(optarg);
@@ -177,10 +181,6 @@ int ArgumentHandler::processArguments() {
 
     case 'S':
       splitweights = optarg;
-      break;
-
-    case 'T':
-      splitString(trainingvars, optarg, ',');
       break;
 
     case 'U':
@@ -655,7 +655,7 @@ void ArgumentHandler::displayHelp() {
       << "--alwayssplitvars V1,V2,..    Comma separated list of variable names to be always considered for splitting."
       << std::endl;
   std::cout << "    "
-      << "--trainingvars V1,V2,..       Comma separated list of variable to include as training data."
+      << "--includevars V1,V2,..        Comma separated list of variable to include when training or predicting."
       << std::endl;
   std::cout << "    "
       << "--regcoef r1,r2,..            Comma separated list of regularization coefficients (one for all variables or one for each variable)."
