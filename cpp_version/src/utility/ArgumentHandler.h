@@ -45,6 +45,7 @@ public:
   int processArguments();
 
   // Check required arguments, ranges, files, ..
+  void checkArguments(bool checkFile);
   void checkArguments();
 
   // All command line arguments as member: Capital letters
@@ -73,6 +74,7 @@ public:
   ImportanceMode impmeasure;
   uint targetpartitionsize;
   uint mtry;
+  std::vector<std::string> inputvars;
   std::string outprefix;
   bool probability;
   SplitRule splitrule;
