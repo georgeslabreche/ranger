@@ -33,7 +33,7 @@ ArgumentHandler::ArgumentHandler(int argc, char **argv) :
 int ArgumentHandler::processArguments() {
 
   // short options
-  char const *short_options = "A:C:D:F:HI:M:NOP:Q:R:S:U:XZa:b:c:d:f:hi:j:kl:m:o:pr:s:t:uvwy:z:";
+  char const *short_options = "A:C:D:F:HI:M:NOP:Q:R:S:U:XZa:b:c:d:f:hi:j:kl:m:n:o:pr:s:t:uvwy:z:";
 
   // long options: longname, no/optional/required argument?, flag(not used!), shortname
   const struct option long_options[] = {
@@ -65,6 +65,7 @@ int ArgumentHandler::processArguments() {
     { "usedepth",             no_argument,        0, 'k'},
     { "targetpartitionsize",  required_argument,  0, 'l'},
     { "mtry",                 required_argument,  0, 'm'},
+    { "inputvars",            required_argument,  0, 'n'},
     { "outprefix",            required_argument,  0, 'o'},
     { "probability",          no_argument,        0, 'p'},
     { "splitrule",            required_argument,  0, 'r'},
@@ -310,6 +311,10 @@ int ArgumentHandler::processArguments() {
       }
       break;
 
+    case 'n':
+      splitString(inputvars, optarg, ',');
+      break;
+
     case 'o':
       outprefix = optarg;
       break;
@@ -431,10 +436,10 @@ int ArgumentHandler::processArguments() {
   return 0;
 }
 
-void ArgumentHandler::checkArguments() {
+void ArgumentHandler::checkArguments(bool checkFile) {
 
   // required arguments
-  if (file.empty()) {
+  if (checkFile && file.empty()) {
     throw std::runtime_error("Please specify an input filename with '--file'. See '--help' for details.");
   }
   if (predict.empty() && depvarname.empty()) {
@@ -542,6 +547,10 @@ void ArgumentHandler::checkArguments() {
       nthreads = 1;
     }
   }
+}
+
+void ArgumentHandler::checkArguments() {
+  checkArguments(true);
 }
 
 void ArgumentHandler::displayHelp() {
